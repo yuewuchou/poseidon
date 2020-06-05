@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xw.poseidon.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.xw.poseidon.model.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, username, password, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xw.poseidon.model.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_user (username, password, create_time
+      )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xw.poseidon.model.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xw.poseidon.model.User">
+    update t_user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xw.poseidon.model.User">
+    update t_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="base_condition">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="null != id">
+         and id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="null != username">
+         and username = #{username,jdbcType=VARCHAR}
+      </if>
+      <if test="null != password">
+         and password = #{password,jdbcType=VARCHAR}
+      </if>
+      <if test="null != createTime">
+         and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </trim>
+  </sql>
+  <sql id="base_condition_page">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="null != record.id">
+         and id = #{record.id,jdbcType=INTEGER}
+      </if>
+      <if test="null != record.username">
+         and username = #{record.username,jdbcType=VARCHAR}
+      </if>
+      <if test="null != record.password">
+         and password = #{record.password,jdbcType=VARCHAR}
+      </if>
+      <if test="null != record.createTime">
+         and create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      </if>
+    </trim>
+  </sql>
+  <insert id="insertBatch" parameterType="List">
+    insert into t_user (username, password, create_time
+      ) values
+    <foreach collection="list" item="item" separator=",">
+       (#{item.username,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}
+        )
+    </foreach>
+  </insert>
+  <select id="selectByCondition" parameterType="com.xw.poseidon.model.User" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    <include refid="base_condition" />
+  </select>
+  <select id="selectPageByCondition" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    <include refid="base_condition_page" />
+    limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="selectPageByConditionCount" parameterType="com.xw.poseidon.model.User" resultType="java.lang.Integer">
+    select count(1) from t_user
+    <include refid="base_condition" />
+  </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <plugin type="com.xw.poseidon.utils.mybatis.PoseidonPluginAdapter">
+        </plugin>
+        
+        <commentGenerator type="com.xw.poseidon.utils.mybatis.PoseidonCommentGenerator">
+            <property name="suppressDate" value="false"/>
+            <property name="suppressAllComments" value="false"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+        
+        <!--数据库连接地址账号密码-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/test?serverTimezone=UTC"
+                        userId="root"
+                        password="qaz123!@#">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+        
+        
+        <!--生成Model（DataObject类）存放的位置-->
+        <javaModelGenerator targetPackage="com.xw.poseidon.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        
+        <!--生成映射文件存放位置-->
+        <sqlMapGenerator targetPackage="com.xw.poseidon.dao.impl"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+        
+        <!--生成Dao类文件存放-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.xw.poseidon.dao"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table tableName="t_user" domainObjectName="User"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
